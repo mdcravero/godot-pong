@@ -1,0 +1,107 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://Player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Ball.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Enemy.gd" type="Script" id=3]
+[ext_resource path="res://Level.gd" type="Script" id=4]
+[ext_resource path="res://retro_computer_personal_use.ttf" type="DynamicFontData" id=5]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 960, 50 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 50, 540 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 32
+outline_color = Color( 0.0470588, 0.12549, 0.541176, 1 )
+font_data = ExtResource( 5 )
+
+[node name="Level" type="Node2D"]
+script = ExtResource( 4 )
+
+[node name="ParedSuperior" type="StaticBody2D" parent="."]
+position = Vector2( 1, 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ParedSuperior"]
+position = Vector2( 960, -50 )
+shape = SubResource( 1 )
+
+[node name="ParedInferior" type="StaticBody2D" parent="."]
+position = Vector2( 1, 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ParedInferior"]
+position = Vector2( 955, 1132 )
+shape = SubResource( 1 )
+
+[node name="ArcoPlayer" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ArcoPlayer"]
+position = Vector2( -50, 540 )
+shape = SubResource( 2 )
+
+[node name="ArcoEnemy" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ArcoEnemy"]
+position = Vector2( 1970, 540 )
+shape = SubResource( 2 )
+
+[node name="Player" parent="." instance=ExtResource( 1 )]
+position = Vector2( 50, 460 )
+
+[node name="Enemy" parent="." instance=ExtResource( 1 )]
+position = Vector2( 1853, 460 )
+script = ExtResource( 3 )
+
+[node name="scoredPlayer" type="Label" parent="."]
+margin_left = 270.0
+margin_top = 4.0
+margin_right = 757.0
+margin_bottom = 922.0
+custom_colors/font_color = Color( 0.0745098, 0.196078, 0.968627, 1 )
+custom_fonts/font = SubResource( 3 )
+text = "Player"
+align = 1
+valign = 1
+
+[node name="scoredEnemy" type="Label" parent="."]
+margin_left = 1203.0
+margin_top = 5.0
+margin_right = 1690.0
+margin_bottom = 923.0
+custom_colors/font_color = Color( 0.0745098, 0.196078, 0.968627, 1 )
+custom_fonts/font = SubResource( 3 )
+text = "Enemy"
+align = 1
+valign = 1
+
+[node name="scoredEnemyNum" type="Label" parent="."]
+margin_left = 1203.0
+margin_top = 53.0
+margin_right = 1690.0
+margin_bottom = 971.0
+custom_colors/font_color = Color( 0.0745098, 0.196078, 0.968627, 1 )
+custom_fonts/font = SubResource( 3 )
+text = "0"
+align = 1
+valign = 1
+
+[node name="scoredPlayerNum" type="Label" parent="."]
+margin_left = 271.0
+margin_top = 55.0
+margin_right = 758.0
+margin_bottom = 973.0
+custom_colors/font_color = Color( 0.0745098, 0.196078, 0.968627, 1 )
+custom_fonts/font = SubResource( 3 )
+text = "0"
+align = 1
+valign = 1
+
+[node name="RestarTime" type="Timer" parent="."]
+
+[node name="Ball" parent="." instance=ExtResource( 2 )]
+position = Vector2( 937, 516 )
+
+[connection signal="body_entered" from="ArcoPlayer" to="." method="_on_ArcoPlayer_body_entered"]
+[connection signal="body_entered" from="ArcoEnemy" to="." method="_on_ArcoEnemy_body_entered"]
+[connection signal="timeout" from="RestarTime" to="Ball" method="_on_RestarTime_timeout"]
